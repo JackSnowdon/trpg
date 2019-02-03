@@ -1,5 +1,12 @@
-from classes.enemy import Enemy
+from classes.game import Person, bcolors
 
-enemy = Enemy(200, 60)
-print("HP:", enemy.get_hp())
-print("max-HP:", enemy.get_max_hp())
+magic = [{"name": "Fire", "cost": 10, "dmg": 60},
+         {"name": "Thunder", "cost": 10, "dmg": 80},
+         {"name": "Blizzard", "cost": 10, "dmg": 60}]
+         
+
+player = Person(460, 65, 60, 34, magic)
+
+print(player.generate_spell_dmg(0))
+print(player.generate_spell_dmg(1))
+print(player.generate_spell_dmg(2))
