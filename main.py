@@ -1,6 +1,7 @@
 from classes.game import Person, bcolors
 from classes.magic import Spell
 from classes.inventory import Item
+import random
 
 
 # Create Black Magic
@@ -142,16 +143,15 @@ while running:
                 
 # Enemy Attack         
     enemy_choice = 1
-    
+    target = random.randrange(0, 3)
     enemy_dmg = enemy.generate_dmg()
-    player1.take_damage(enemy_dmg)
+    
+    players[target].take_damage(enemy_dmg)
     print("Enemy attacks for", enemy_dmg, 
     "points of damage.")
 
 # Round Results    
-    print("-----------------------------")
-    print("Enemy HP:", bcolors.FAIL + str(enemy.get_hp()) + "/"
-    + str(enemy.get_max_hp()) + bcolors.ENDC + "\n")
+    
     
     if enemy.get_hp() == 0:
         print(bcolors.OKGREEN + "You win!" + bcolors.ENDC)
