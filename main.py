@@ -38,9 +38,13 @@ player_items = [{"item": potion, "quantity": 15}, {"item": hipotion, "quantity":
 player1 = Person("Valos:", 3460, 265, 180, 34, player_spells, player_items)
 player2 = Person("Range:", 2460, 220, 140, 34, player_spells, player_items)
 player3 = Person("Latho:", 8460, 290, 160, 34, player_spells, player_items)
-enemy = Person("Magus:", 11200, 120, 560, 25, [], [])
+
+enemy1 = Person("Imp  :", 1500, 130, 700, 325, [], [])
+enemy2 = Person("Magus:", 18000, 120, 560, 25, [], [])
+enemy3 = Person("Imp  :", 1500, 130, 700, 325, [], [])
 
 players = [player1, player2, player3]
+enemies = [enemy1, enemy2, enemy3]
 
 # Init Game
 running = True
@@ -59,7 +63,8 @@ while running:
         
     print("\n")
     
-    enemy.get_enemy_stats()
+    for enemy in enemies:
+        enemy.get_enemy_stats()
         
     for player in players:
         
@@ -70,10 +75,15 @@ while running:
 # Attack
         if index == 0:
             dmg = player.generate_dmg()
-            enemy.take_damage(dmg)
-            print("You attacked for", dmg, 
+            enemy = player.choose_target(enemies)
+            
+            enemies[enemy].take_damage(dmg)
+            print("You attacked " + enemies[enemy].name.replace(" ", "") + " for"  , dmg, 
             "points of damage.")
             
+            if enemies[enemy].get_hp() == 0:
+                print(enemies[enemy].name.replace(" ", "") + " has died.")
+                del enemies[enemy]
 # Magic
         elif index == 1:
             player.choose_magic()
@@ -98,9 +108,16 @@ while running:
                 print(bcolors.OKGREEN + "\n" + spell.name + " heals for",
                 str(magic_dmg), "HP." + bcolors.ENDC)
             elif spell.type == "black":
-                enemy.take_damage(magic_dmg)
+                enemy = player.choose_target(enemies)
+            
+                enemies[enemy].take_damage(magic_dmg)
+                
                 print(bcolors.OKBLUE + "\n" + spell.name + " deals", str(magic_dmg),
-                "points of damage" + bcolors.ENDC)
+                "points of damage to " + enemies[enemy].name.replace(" ", "") + bcolors.ENDC)
+                
+                if enemies[enemy].get_hp() == 0:
+                    print(enemies[enemy].name.replace(" ", "") + " has died.")
+                    del enemies[enemy]
 # Items    
         elif index == 2:
             player.choose_item()
@@ -137,14 +154,20 @@ while running:
                 print(bcolors.OKGREEN + "\n" + item.name + " fully restores HP/MP"
                 + bcolors.ENDC)
             elif item.type == "attack":
-                enemy.take_damage(item.prop)
+                enemy = player.choose_target(enemies)
+                enemies[enemy].take_damage(item.prop)
+                
                 print(bcolors.FAIL + "\n" + item.name + " deals", str(item.prop),
-                "points of damage" + bcolors.ENDC)
+                "points of damage to " + enemies[enemy].name.replace(" ", "") + bcolors.ENDC)
+                
+                if enemies[enemy].get_hp() == 0:
+                    print(enemies[enemy].name.replace(" ", "") + " has died.")
+                    del enemies[enemy]
                 
 # Enemy Attack         
     enemy_choice = 1
     target = random.randrange(0, 3)
-    enemy_dmg = enemy.generate_dmg()
+    enemy_dmg = enemies[0].generate_dmg()
     
     players[target].take_damage(enemy_dmg)
     print("Enemy attacks for", enemy_dmg, 
@@ -152,10 +175,18 @@ while running:
 
 # Round Results    
     
+    defeated_enemies = 0
+    defeated_players = 0
     
-    if enemy.get_hp() == 0:
+    for player in players:
+        if player.get_hp() == 0:
+            defeated_players += 1
+    for enemy in enemies:
+        if enemy.get_hp() == 0:
+            defeated_enemies += 1
+    if defeated_enemies == 2:
         print(bcolors.OKGREEN + "You win!" + bcolors.ENDC)
         running = False
-    elif player.get_hp() == 0:
+    elif defeated_players == 2:
         print(bcolors.FAIL + "You have been defeated. Game Over." + bcolors.ENDC)
         running = False
