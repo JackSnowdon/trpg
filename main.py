@@ -57,6 +57,8 @@ while running:
         player.get_stats()
         
     print("\n")
+    
+    enemy.get_enemy_stats()
         
     for player in players:
         
