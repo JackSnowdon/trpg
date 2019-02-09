@@ -37,7 +37,7 @@ imp_spells = [fire, cure]
 magus_spells = [fire, quake, cura]
 
 # Instantiate People
-player1 = Person("Valos:", 3460, 265, 180, 34, player_spells, player_items)
+player1 = Person("Valos:", 34, 265, 180, 34, player_spells, player_items)
 player2 = Person("Range:", 2460, 220, 140, 34, player_spells, player_items)
 player3 = Person("Latho:", 8460, 290, 160, 34, player_spells, player_items)
 
@@ -192,15 +192,22 @@ while running:
     # Enemy attack phase
     for enemy in enemies:
         enemy_choice = random.randrange(0, 2)
+        player_check = len(players) 
         
         if enemy_choice == 0:
-            target = random.randrange(0, 3)
-            enemy_dmg = enemies[0].generate_dmg()
+            target = random.randrange(0, player_check) 
             
+            enemy_dmg = enemies[0].generate_dmg()
+            print(target, player_check)
             players[target].take_damage(enemy_dmg)
             print(enemy.name.replace(" :", "") + " attacks "
             + players[target].name.replace(" :", "") + " for", enemy_dmg, 
             "points of damage.")
+            
+            if players[target].get_hp() == 0:
+                print(players[target].name.replace(" :", "") + " has died.")
+                del players[target]
+                defeated_players += 1
             
         elif enemy_choice == 1:
             spell, magic_dmg = enemy.choose_enemy_spell()
@@ -212,8 +219,8 @@ while running:
                 + enemy.name + " for", str(magic_dmg), "HP." + bcolors.ENDC)
             elif spell.type == "black":
                 
-                target = random.randrange(0, 3)
-            
+                target = random.randrange(0, player_check)
+                print(target, player_check)
                 players[target].take_damage(magic_dmg)
                 
                 print(bcolors.OKBLUE + "\n" + enemy.name.replace(" ", "") + "'s "
@@ -223,7 +230,8 @@ while running:
                 if players[target].get_hp() == 0:
                     print(players[target].name.replace(" :", "") + " has died.")
                     del players[target]
-            # print("Enemy chose ", spell, " damage is", magic_dmg)
+                    defeated_players += 1
+           
                 
             
             
