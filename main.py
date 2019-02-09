@@ -82,11 +82,11 @@ while running:
             enemy = player.choose_target(enemies)
             
             enemies[enemy].take_damage(dmg)
-            print("You attacked " + enemies[enemy].name.replace(" ", "") + " for"  , dmg, 
+            print("You attacked " + enemies[enemy].name.replace(" :", "") + "for"  , dmg, 
             "points of damage.")
             
             if enemies[enemy].get_hp() == 0:
-                print(enemies[enemy].name.replace(" ", "") + " has died.")
+                print(enemies[enemy].name.replace(" :", "") + " has died.")
                 del enemies[enemy]
         # Magic
         elif index == 1:
@@ -117,10 +117,10 @@ while running:
                 enemies[enemy].take_damage(magic_dmg)
                 
                 print(bcolors.OKBLUE + "\n" + spell.name + " deals", str(magic_dmg),
-                "points of damage to " + enemies[enemy].name.replace(" ", "") + bcolors.ENDC)
+                "points of damage to " + enemies[enemy].name.replace(" :", "") + bcolors.ENDC)
                 
                 if enemies[enemy].get_hp() == 0:
-                    print(enemies[enemy].name.replace(" ", "") + " has died.")
+                    print(enemies[enemy].name.replace(" :", "") + " has died.")
                     del enemies[enemy]
         # Items    
         elif index == 2:
@@ -162,10 +162,10 @@ while running:
                 enemies[enemy].take_damage(item.prop)
                 
                 print(bcolors.FAIL + "\n" + item.name + " deals", str(item.prop),
-                "points of damage to " + enemies[enemy].name.replace(" ", "") + bcolors.ENDC)
+                "points of damage to " + enemies[enemy].name.replace(" :", "") + bcolors.ENDC)
                 
                 if enemies[enemy].get_hp() == 0:
-                    print(enemies[enemy].name.replace(" ", "") + " has died.")
+                    print(enemies[enemy].name.replace(" :", "") + " has died.")
                     del enemies[enemy]
                 
 # Check if battle is over
@@ -187,18 +187,19 @@ while running:
     elif defeated_players == 2:
         print(bcolors.FAIL + "You have been defeated. Game Over." + bcolors.ENDC)
         running = False
-        
+    
+    print("\n")    
     # Enemy attack phase
     for enemy in enemies:
-        enemy_choice = random.randrange(0, 3)
+        enemy_choice = random.randrange(0, 2)
         
         if enemy_choice == 0:
             target = random.randrange(0, 3)
             enemy_dmg = enemies[0].generate_dmg()
             
             players[target].take_damage(enemy_dmg)
-            print(enemy.name.replace(" ", "") + " attacks "
-            + players[target].name.replace(" ", "") + " for", enemy_dmg, 
+            print(enemy.name.replace(" :", "") + " attacks "
+            + players[target].name.replace(" :", "") + " for", enemy_dmg, 
             "points of damage.")
             
         elif enemy_choice == 1:
@@ -207,7 +208,7 @@ while running:
             
             if spell.type == "white":
                 enemy.heal(magic_dmg)
-                print(bcolors.OKGREEN + "\n" + spell.name + " heals "
+                print(bcolors.OKGREEN + spell.name + " heals "
                 + enemy.name + " for", str(magic_dmg), "HP." + bcolors.ENDC)
             elif spell.type == "black":
                 
@@ -217,10 +218,10 @@ while running:
                 
                 print(bcolors.OKBLUE + "\n" + enemy.name.replace(" ", "") + "'s "
                 + spell.name + " deals", str(magic_dmg), "points of damage to "
-                + players[target].name.replace(" ", "") + bcolors.ENDC)
+                + players[target].name.replace(" :", "") + bcolors.ENDC)
                 
                 if players[target].get_hp() == 0:
-                    print(players[target].name.replace(" ", "") + " has died.")
+                    print(players[target].name.replace(" :", "") + " has died.")
                     del players[target]
             # print("Enemy chose ", spell, " damage is", magic_dmg)
                 
